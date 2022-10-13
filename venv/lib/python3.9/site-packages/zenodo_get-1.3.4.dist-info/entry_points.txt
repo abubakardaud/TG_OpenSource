@@ -1,0 +1,3 @@
+[console_scripts]
+zenodo_get = zenodo_get.zget:zenodo_get
+
