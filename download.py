@@ -192,10 +192,12 @@ class TemporalDataSets(object):
         else:
             print(bcolors.FAIL + "Download cancelled" + bcolors.ENDC)
 
+
     def check_downloaded(self):
         if not osp.isdir(f"./{base_directory}"):
             print(f"dict: {base_directory} not found")
             self.download_file()
+            return
         list_data_not_found = []
         for data_set_name in self.data_list:
             data_found = True
