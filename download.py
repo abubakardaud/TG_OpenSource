@@ -1,24 +1,17 @@
-# import pandas as pd
-import shutil, os
+import os
 import os.path as osp
-import boto3
-import botocore
-from botocore.handlers import disable_signing
-import tqdm
-from botocore import UNSIGNED
-from botocore.client import Config
-import hashlib
-import zenodo_get as zget
-import zipfile
+import random
 import shutil
-from pathlib import Path
-from enum import Enum
 import sys
-from clint.textui import progress
-import requests
+import zipfile
+from enum import Enum
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
-import random
+import requests
+from clint.textui import progress
+
 
 class Data:
     def __init__(self, sources, destinations, timestamps, edge_idxs, labels):
