@@ -1,24 +1,17 @@
-# import pandas as pd
-import shutil, os
+import os
 import os.path as osp
-import boto3
-import botocore
-from botocore.handlers import disable_signing
-import tqdm
-from botocore import UNSIGNED
-from botocore.client import Config
-import hashlib
-import zenodo_get as zget
-import zipfile
+import random
 import shutil
-from pathlib import Path
-from enum import Enum
 import sys
-from clint.textui import progress
-import requests
+import zipfile
+from enum import Enum
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
-import random 
+import requests
+from clint.textui import progress
+ 
 
 
 
@@ -458,12 +451,18 @@ if __name__ == "__main__":
     random.seed(2020)
     input_list = "canparl"
     example_data = TemporalDataSets(data_list=input_list)
-    example_data.redownload()
+
+
+
+
+
+
+    #example_data.redownload()
     #example_data.process()
 
-    training_data = example_data.train_data 
-    training_data = example_data.training_data 
-    val_data = example_data.val_data 
+    #training_data = example_data.train_data 
+    #training_data = example_data.training_data 
+    #val_data = example_data.val_data 
 
 
 
