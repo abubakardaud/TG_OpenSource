@@ -18,7 +18,9 @@ from clint.textui import progress
 import requests
 import numpy as np
 import pandas as pd
-import random
+import random 
+
+
 
 class Data:
     def __init__(self, sources, destinations, timestamps, edge_idxs, labels):
@@ -32,13 +34,14 @@ class Data:
         self.n_unique_nodes = len(self.unique_nodes)
 
 
+
+
 zen_id = 7213796
 zend_id_all = 7008205
 # https://zenodo.org/record/7008205#.YxtIwi0r1hC
 base_directory = "TG_network_datasets"
+#zen_id = 7008204 for the most updated version.
 
-
-# zen_id = 7008204 for the most updated version.
 
 
 class bcolors:
@@ -70,20 +73,23 @@ class DataSetName(Enum):
 
 
 check_dict = {
-    "canparl": DataSetName.CanParl,
-    "contacts": DataSetName.Contacts,
-    "enron": DataSetName.Contacts,
-    "flights": DataSetName.Flights,
-    "lastfm": DataSetName.Lastfm,
-    "mooc": DataSetName.Mooc,
-    "reddit": DataSetName.Reddit,
-    "socialEvo": DataSetName.SocialEvo,
-    "UCI": DataSetName.UCI,
-    "un_trade": DataSetName.UNtrade,
-    "un_vote": DataSetName.UNvote,
-    "us_Legis": DataSetName.USLegis,
-    "wikipedia": DataSetName.Wikipedia,
+    "canparl" : DataSetName.CanParl,
+    "contacts" : DataSetName.Contacts,
+    "enron" : DataSetName.Contacts,
+    "flights" : DataSetName.Flights,
+    "lastfm" : DataSetName.Lastfm,
+    "mooc" : DataSetName.Mooc,
+    "reddit" : DataSetName.Reddit,
+    "socialEvo" : DataSetName.SocialEvo,
+    "UCI" : DataSetName.UCI,
+    "un_trade" : DataSetName.UNtrade,
+    "un_vote" : DataSetName.UNvote,
+    "us_Legis" : DataSetName.USLegis,
+    "wikipedia" : DataSetName.Wikipedia,
 }
+
+
+
 
 sub_dict = {
     "CanParl": ["CanParl.csv", "ml_CanParl.csv", "ml_CanParl.npy", "ml_CanParl_node.npy"],
@@ -102,6 +108,13 @@ sub_dict = {
 }
 
 data_set_list = list[DataSetName]
+
+
+def get_data_names():
+    print("The following is the list of possible dataset names")
+    for name in check_dict.keys():
+        print(name)
+    print("useage is: ")
 
 
 def unzip_delete():
@@ -129,13 +142,14 @@ def unzip_delete():
         pass
 
 
+
 class TemporalDataSets(object):
-    def __init__(self, data_list: str = None, data_set_statistics: bool = True):
+    def __init__(self, data_list: str = None, data_set_statistics : bool = True ):
         """
             - data_list (data_set_list): [ list of dataset enums ]
         """
-
-        self.data_set_statistics = data_set_statistics
+        
+        self.data_set_statistics = data_set_statistics 
         self.url = f"https://zenodo.org/record/{zen_id}"
         self.mask = None
         if data_list not in check_dict.keys():
@@ -153,14 +167,15 @@ class TemporalDataSets(object):
 
         else:
             self.data_list = [check_dict.get(data_list)]  # original name
-            # sys.stdout.write("Dataset title: ")
-            # for dataset in self.data_list:
+            #sys.stdout.write("Dataset title: ")
+            #for dataset in self.data_list:
             #    sys.stdout.write(f"{str(dataset)}")
-            # sys.stdout.write("\n")
+            #sys.stdout.write("\n")
             self.url += f"/files/{self.data_list[0].value}.zip?download=1"
             self.path_download = f"./{self.data_list[0].value}.zip"
 
         self.check_downloaded()
+
 
     def delete_single(self):
         try:
@@ -205,6 +220,7 @@ class TemporalDataSets(object):
         else:
             print(bcolors.FAIL + "Download cancelled" + bcolors.ENDC)
 
+
     def check_downloaded(self):
         if not osp.isdir(f"./{base_directory}"):
             print(f"dict: {base_directory} not found")
@@ -229,8 +245,7 @@ class TemporalDataSets(object):
             self.download_file()
 
     def redownload(self):
-        print(
-            bcolors.WARNING + "attempting redownload, will remove ALL files and download ALL possible files" + bcolors.ENDC)
+        print(bcolors.WARNING + "attempting redownload, will remove ALL files and download ALL possible files" + bcolors.ENDC)
         inp = input('Confirm redownload? (y/N)\n').lower()
         if 'y' == inp:
             try:
@@ -249,47 +264,58 @@ class TemporalDataSets(object):
             print("download cancelled")
 
     def process(self):
-        # f"./{base_directory}/self."
+        # f"./{base_directory}/self." 
         # need to implement the processing.
         self.get_split()
         self.node_features, self.edge_features, self.full_data, self.train_data, self.val_data, self.test_data, \
-        self.new_node_val_data, self.new_node_test_data, masks = self.get_data()
-
+           self.new_node_val_data, self.new_node_test_data, masks = self.get_data()
+        
         self.mask = masks
+        # todo save these self.node_features. 
 
-        # todo save these self.node_features.
 
     '''
     this function will 
     1. retrieve the saved splits for node masks, train, val, test if default=True
     2. generate new masks if default = False, and use the random seed to generate the new masks
     '''
-
-    def get_split(self, default=True, seed=2020):
+    def get_split(self,default=True, seed=2020):
         if (default):
             train_idx = np.load(...)
             val_idx = np.load(...)
             test_idx = np.load(...)
-            self.masks = {"idx_train": train_idx, "idx_val": val_idx, "idx_test": test_idx}
+            self.masks = {"idx_train": train_idx,"idx_val": val_idx, "idx_test": test_idx}
         else:
             # generate the random split here
             new_test_node_set = set(random.sample(test_node_set, int(0.1 * n_total_unique_nodes)))
 
-    def get_data(self, different_new_nodes_between_val_and_test=False, randomize_features=False):
 
-        if (self.mask is None):
-            sys.stdout.write(f"{bcolors.FAIL}self.masks not found error{bcolors.ENDC}")
-            raise Exception("Please run get_split() before get_data()")
+    def get_data_link_pred_from_indices(dataset_name, randomize_fatures=False):
+        """
+        Load data based on the indices read from file
+        """
+        ### Load data and train val test split
+        graph_df = pd.read_csv('./data/ml_{}.csv'.format(dataset_name))
+        edge_features = np.load('./data/ml_{}.npy'.format(dataset_name))
+        node_features = np.load('./data/ml_{}_node.npy'.format(dataset_name))
 
-        train_idx = self.masks["idx_train"]
-        val_idx = self.masks["idx_val"]
-        test_idx = self.masks["idx_test"]
-        new_node_val_idx = self.masks['idx_new_node_val']
-        new_node_test_idx = self.masks['idx_new_node_test']
 
+    # def get_data(self, different_new_nodes_between_val_and_test=False, randomize_features=False):
+        
+    #     if (self.mask is None):
+    #         sys.stdout.write(f"{bcolors.FAIL}self.masks not found error{bcolors.ENDC}")
+    #         raise Exception("Please run get_split() before get_data()")
+        
+    #     train_idx = self.masks["idx_train"]
+    #     val_idx = self.masks["idx_val"]
+    #     test_idx = self.masks["idx_test"]
+    #     new_node_val_idx = self.masks['idx_new_node_val']
+    #     new_node_test_idx = self.masks['idx_new_node_test'] 
+  
+            
     def get_data(self, val_ratio=0.15, test_ratio=0.15, different_new_nodes_between_val_and_test=False,
-                 randomize_features=False):
-
+             randomize_features=False):
+  
         value = self.data_list[0].value
         path_to_dict = f"./{base_directory}/{value}"
 
@@ -322,6 +348,7 @@ class TemporalDataSets(object):
 
         full_data = Data(sources, destinations, timestamps, edge_idxs, labels)
 
+
         node_set = set(sources) | set(destinations)
         n_total_unique_nodes = len(node_set)
 
@@ -347,7 +374,7 @@ class TemporalDataSets(object):
         train_mask = np.logical_and(timestamps <= val_time, observed_edges_mask)
 
         train_data = Data(sources[train_mask], destinations[train_mask], timestamps[train_mask],
-                          edge_idxs[train_mask], labels[train_mask])
+                        edge_idxs[train_mask], labels[train_mask])
 
         # define the new nodes sets for testing inductiveness of the model
         train_node_set = set(train_data.sources).union(train_data.destinations)
@@ -381,20 +408,20 @@ class TemporalDataSets(object):
                         edge_idxs[val_mask], labels[val_mask])
 
         test_data = Data(sources[test_mask], destinations[test_mask], timestamps[test_mask],
-                         edge_idxs[test_mask], labels[test_mask])
+                        edge_idxs[test_mask], labels[test_mask])
 
         # validation and test with edges that at least has one new node (not in training set)
         new_node_val_data = Data(sources[new_node_val_mask], destinations[new_node_val_mask],
-                                 timestamps[new_node_val_mask],
-                                 edge_idxs[new_node_val_mask], labels[new_node_val_mask])
+                                timestamps[new_node_val_mask],
+                                edge_idxs[new_node_val_mask], labels[new_node_val_mask])
 
         new_node_test_data = Data(sources[new_node_test_mask], destinations[new_node_test_mask],
-                                  timestamps[new_node_test_mask], edge_idxs[new_node_test_mask],
-                                  labels[new_node_test_mask])
-
-        if self.data_set_statistics:
+                                timestamps[new_node_test_mask], edge_idxs[new_node_test_mask],
+                                labels[new_node_test_mask])
+        
+        if self.data_set_statistics: 
             print("The dataset has {} interactions, involving {} different nodes".format(full_data.n_interactions,
-                                                                                         full_data.n_unique_nodes))
+                                                                                        full_data.n_unique_nodes))
             print("The training dataset has {} interactions, involving {} different nodes".format(
                 train_data.n_interactions, train_data.n_unique_nodes))
             print("The validation dataset has {} interactions, involving {} different nodes".format(
@@ -409,8 +436,13 @@ class TemporalDataSets(object):
                 len(new_test_node_set)))
 
         return node_features, edge_features, full_data, train_data, val_data, test_data, \
-               new_node_val_data, new_node_test_data, {"idx_train": train_mask, "idx_test": test_mask,
-                                                       "idx_val": val_mask}
+            new_node_val_data, new_node_test_data, {"idx_train": train_mask, "idx_test": test_mask, "idx_val": val_mask}
+
+
+            
+            
+
+
 
 
 # DREAM
@@ -427,11 +459,15 @@ if __name__ == "__main__":
     input_list = "canparl"
     example_data = TemporalDataSets(data_list=input_list)
     example_data.redownload()
-    # example_data.process()
+    #example_data.process()
 
-    training_data = example_data.train_data
-    training_data = example_data.training_data
-    val_data = example_data.val_data
+    training_data = example_data.train_data 
+    training_data = example_data.training_data 
+    val_data = example_data.val_data 
+
+
+
+
 
 # TODO
 # make sure it works for indervidual files download

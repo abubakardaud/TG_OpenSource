@@ -55,10 +55,10 @@ def reindex(df, bipartite=True):
 
 
 def run(data_name, bipartite=True):
-    ("data/").mkdir(parents=True, exist_ok=True)
+    Path("data/").mkdir(parents=True, exist_ok=True)
     PATH = './data/{}.csv'.format(data_name)
     OUT_DF = './data/ml_{}.csv'.format(data_name)
-    OUT_FEAT = './dataPath/ml_{}.npy'.format(data_name)
+    OUT_FEAT = './data/ml_{}.npy'.format(data_name)
     OUT_NODE_FEAT = './data/ml_{}_node.npy'.format(data_name)
 
     df, feat = preprocess(PATH)

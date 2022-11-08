@@ -1,0 +1,5 @@
+*.csv
+pycache/
+venv/
+TG_network_datasets/
+.idea/
