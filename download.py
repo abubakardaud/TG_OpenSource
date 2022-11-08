@@ -426,12 +426,18 @@ if __name__ == "__main__":
     random.seed(2020)
     input_list = "canparl"
     example_data = TemporalDataSets(data_list=input_list)
-    example_data.redownload()
+
+
+
+
+
+
+    #example_data.redownload()
     # example_data.process()
 
-    training_data = example_data.train_data
-    training_data = example_data.training_data
-    val_data = example_data.val_data
+    #training_data = example_data.train_data
+    #training_data = example_data.training_data
+    #val_data = example_data.val_data
 
 # TODO
 # make sure it works for indervidual files download
