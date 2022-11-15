@@ -1,5 +1,8 @@
 from pathlib import Path
 import argparse
+import numpy as np
+import random
+import pandas as pd
 
 
 def preprocess(data_name):
@@ -85,12 +88,6 @@ args = parser.parse_args()
 run(args.data, bipartite=args.bipartite)
 
 
-
-import numpy as np
-import random
-import pandas as pd
-
-
 class Data:
     def __init__(self, sources, destinations, timestamps, edge_idxs, labels):
         self.sources = sources
@@ -143,8 +140,6 @@ def get_data(dataset_name, val_ratio, test_ratio, different_new_nodes_between_va
     graph_df = pd.read_csv('./data/ml_{}.csv'.format(dataset_name))
     edge_features = np.load('./data/ml_{}.npy'.format(dataset_name))
     node_features = np.load('./data/ml_{}_node.npy'.format(dataset_name))
-
-
 
     # additional for CAW data specifically
     if dataset_name in ['enron', 'socialevolve', 'uci']:
